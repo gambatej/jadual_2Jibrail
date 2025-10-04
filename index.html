@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadual Waktu Kelas 2 Jibrail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: #1e40af; /* Biru lebih gelap */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .day-button {
+            transition: all 0.3s ease;
+        }
+        .day-button.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .timetable-card {
+            background: white;
+            border-left: 5px solid #3b82f6;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .timetable-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .break-card {
+            border-left-color: #f59e0b; /* Oren */
+            background-color: #fffbeb;
+        }
+        .assembly-card {
+             border-left-color: #8b5cf6; /* Ungu */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
+        
+        <!-- Pengepala -->
+        <header class="text-center mb-8">
+            <div class="flex justify-center items-center gap-4">
+                <img src="https://scontent.fkul6-2.fna.fbcdn.net/v/t39.30808-6/410467249_811915354073903_6576853622577004600_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFD0_LPyfFkuytAOASHZuS_4a0Q5aVGvrXhrRDlpUa-tUULTeK46Retv756yYGChSX16jvD2ZhAu9WOO8L355KX&_nc_ohc=kUi44dHys6sQ7kNvwFw8KDe&_nc_oc=AdkQQWjqdTQQpRdNTM_xtKxq0NDejrE5yTk8Kdm0IBz3lgbZulWEH-wFu-4Doo9y-fw&_nc_zt=23&_nc_ht=scontent.fkul6-2.fna&_nc_gid=0gzyCkI6_Fz8YolI0Nfw0Q&oh=00_AfedZyhYsTQ8roHnTeyVHriG00no5xkHENgi5bfR0zcxgw&oe=68E74DBA" alt="Logo Sekolah Kiri" class="h-12 sm:h-16 rounded-full">
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Jadual Waktu Sekolah</h1>
+                <img src="https://scontent.fkul6-2.fna.fbcdn.net/v/t39.30808-6/410467249_811915354073903_6576853622577004600_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFD0_LPyfFkuytAOASHZuS_4a0Q5aVGvrXhrRDlpUa-tUULTeK46Retv756yYGChSX16jvD2ZhAu9WOO8L355KX&_nc_ohc=kUi44dHys6sQ7kNvwFw8KDe&_nc_oc=AdkQQWjqdTQQpRdNTM_xtKxq0NDejrE5yTk8Kdm0IBz3lgbZulWEH-wFu-4Doo9y-fw&_nc_zt=23&_nc_ht=scontent.fkul6-2.fna&_nc_gid=0gzyCkI6_Fz8YolI0Nfw0Q&oh=00_AfedZyhYsTQ8roHnTeyVHriG00no5xkHENgi5bfR0zcxgw&oe=68E74DBA" alt="Logo Sekolah Kanan" class="h-12 sm:h-16 rounded-full">
+            </div>
+            <div class="mt-4 text-gray-600 inline-block text-left bg-white p-4 rounded-lg shadow-sm">
+                <p><span class="font-semibold">Sekolah:</span> س.ا.ر كافا (ا) ڤونچق عالم ٢</p>
+                <p><span class="font-semibold">Kelas:</span> ٢ جبريل</p>
+                <p><span class="font-semibold">Sesi:</span> ڤاڬي</p>
+                <p><span class="font-semibold">Nama Murid:</span> ڤوتري نور عايشه</p>
+            </div>
+        </header>
+
+        <!-- Tab Navigasi Utama -->
+        <div class="flex justify-center bg-white/70 backdrop-blur-sm rounded-xl shadow-md p-2 mb-8 sticky top-4 z-10">
+            <button onclick="changePage('daily')" id="btn-daily" class="tab-button active flex-1 sm:flex-initial sm:w-48 text-center py-3 px-4 rounded-lg font-semibold text-gray-700">Jadual Harian</button>
+            <button onclick="changePage('weekly')" id="btn-weekly" class="tab-button flex-1 sm:flex-initial sm:w-48 text-center py-3 px-4 rounded-lg font-semibold text-gray-700">Jadual Mingguan</button>
+            <button onclick="changePage('academic')" id="btn-academic" class="tab-button flex-1 sm:flex-initial sm:w-48 text-center py-3 px-4 rounded-lg font-semibold text-gray-700">Kalender Akademik</button>
+        </div>
+
+        <main>
+            <!-- Halaman 1: Jadual Harian -->
+            <div id="page-daily" class="page active">
+                <div class="flex flex-wrap justify-center gap-2 mb-6 bg-blue-50 p-3 rounded-lg">
+                    <button onclick="renderDaily('Isnin')" id="day-Isnin" class="day-button active flex-1 px-4 py-2 text-sm sm:text-base font-medium rounded-md">إِثْنَيْن</button>
+                    <button onclick="renderDaily('Selasa')" id="day-Selasa" class="day-button flex-1 px-4 py-2 text-sm sm:text-base font-medium rounded-md">ثُلَاثَاء</button>
+                    <button onclick="renderDaily('Rabu')" id="day-Rabu" class="day-button flex-1 px-4 py-2 text-sm sm:text-base font-medium rounded-md">أَرْبِعَاء</button>
+                    <button onclick="renderDaily('Khamis')" id="day-Khamis" class="day-button flex-1 px-4 py-2 text-sm sm:text-base font-medium rounded-md">خَمِيس</button>
+                    <button onclick="renderDaily('Jumaat')" id="day-Jumaat" class="day-button flex-1 px-4 py-2 text-sm sm:text-base font-medium rounded-md">جُمُعَة</button>
+                </div>
+                <div id="daily-content">
+                    <!-- Jadual harian akan dipaparkan di sini -->
+                </div>
+            </div>
+
+            <!-- Halaman 2: Jadual Mingguan -->
+            <div id="page-weekly" class="page">
+                <!-- Jadual mingguan penuh akan dipaparkan di sini oleh renderWeekly() -->
+            </div>
+
+            <!-- Halaman 3: Kalendar Akademik -->
+            <div id="page-academic" class="page">
+                <div id="academic-content">
+                    <!-- Kalendar akademik akan dipaparkan di sini -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const timetableData = {
+          "Isnin": [
+            { subject: "AQ", teacher: "-", time: "07:45 AM - 08:15 AM" },
+            { subject: "Amali Solat", teacher: "-", time: "08:15 AM - 08:45 AM" },
+            { subject: "AK", teacher: "-", time: "08:45 AM - 09:15 AM" },
+            { subject: "AK", teacher: "-", time: "09:15 AM - 09:45 AM" },
+            { subject: "REHAT", teacher: "-", time: "09:45 AM - 10:05 AM" },
+            { subject: "BA", teacher: "-", time: "10:05 AM - 10:35 AM" },
+            { subject: "BA", teacher: "-", time: "10:35 AM - 11:05 AM" },
+          ],
+          "Selasa": [
+            { subject: "AQ", teacher: "-", time: "07:45 AM - 08:15 AM" },
+            { subject: "Amali Solat", teacher: "-", time: "08:15 AM - 08:45 AM" },
+            { subject: "AK", teacher: "-", time: "08:45 AM - 09:15 AM" },
+            { subject: "BA", teacher: "-", time: "09:15 AM - 09:45 AM" },
+            { subject: "REHAT", teacher: "-", time: "09:45 AM - 10:05 AM" },
+            { subject: "FQ", teacher: "-", time: "10:05 AM - 10:35 AM" },
+            { subject: "FQ", teacher: "-", time: "10:35 AM - 11:05 AM" },
+          ],
+          "Rabu": [
+            { subject: "AQ", teacher: "-", time: "07:45 AM - 08:15 AM" },
+            { subject: "Amali Solat", teacher: "-", time: "08:15 AM - 08:45 AM" },
+            { subject: "TH", teacher: "-", time: "08:45 AM - 09:15 AM" },
+            { subject: "TH", teacher: "-", time: "09:15 AM - 09:45 AM" },
+            { subject: "REHAT", teacher: "-", time: "09:45 AM - 10:05 AM" },
+            { subject: "JW", teacher: "-", time: "10:05 AM - 10:35 AM" },
+            { subject: "JW", teacher: "-", time: "10:35 AM - 11:05 AM" },
+          ],
+          "Khamis": [
+            { subject: "AQ", teacher: "-", time: "07:45 AM - 08:15 AM" },
+            { subject: "Amali Solat", teacher: "-", time: "08:15 AM - 08:45 AM" },
+            { subject: "FQ", teacher: "-", time: "08:45 AM - 09:15 AM" },
+            { subject: "JW", teacher: "-", time: "09:15 AM - 09:45 AM" },
+            { subject: "REHAT", teacher: "-", time: "09:45 AM - 10:05 AM" },
+            { subject: "SR", teacher: "-", time: "10:05 AM - 10:35 AM" },
+            { subject: "SR", teacher: "-", time: "10:35 AM - 11:05 AM" },
+          ],
+          "Jumaat": [
+            { subject: "AQ", teacher: "-", time: "07:45 AM - 08:15 AM" },
+            { subject: "Amali Solat", teacher: "-", time: "08:15 AM - 08:45 AM" },
+            { subject: "HF", teacher: "-", time: "08:45 AM - 09:15 AM" },
+            { subject: "HF", teacher: "-", time: "09:15 AM - 09:45 AM" },
+            { subject: "TH", teacher: "-", time: "09:45 AM - 10:05 AM" },
+            { subject: "SR", teacher: "-", time: "10:05 AM - 10:35 AM" },
+            { subject: "TH", teacher: "-", time: "10:35 AM - 11:05 AM" },
+          ]
+        };
+        
+        const subjectColors = {
+            'AQ':           'bg-sky-100 hover:bg-sky-200',
+            'Amali Solat':  'bg-teal-100 hover:bg-teal-200',
+            'AK':           'bg-purple-100 hover:bg-purple-200',
+            'BA':           'bg-indigo-100 hover:bg-indigo-200',
+            'TH':           'bg-pink-100 hover:bg-pink-200',
+            'FQ':           'bg-green-100 hover:bg-green-200',
+            'JW':           'bg-yellow-100 hover:bg-yellow-200',
+            'HF':           'bg-red-100 hover:bg-red-200',
+            'SR':           'bg-orange-100 hover:bg-orange-200',
+            'REHAT':        'bg-amber-100 hover:bg-amber-200 font-medium text-amber-800',
+        };
+        const defaultColor = 'bg-white hover:bg-gray-50';
+
+        let currentPage = 'daily';
+        let currentDay = 'Isnin';
+
+        function changePage(page) {
+            currentPage = page;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page-${page}`).classList.add('active');
+            
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${page}`).classList.add('active');
+
+            if (page === 'weekly') renderWeekly();
+            if (page === 'academic') renderAcademic();
+        }
+
+        function renderDaily(day) {
+            currentDay = day;
+            document.querySelectorAll('.day-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`day-${day}`).classList.add('active');
+            
+            const content = document.getElementById('daily-content');
+            const daySchedule = timetableData[day] || [];
+            
+            let tableHTML = `
+                <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+                    <table class="min-w-full text-sm text-left text-gray-700">
+                        <thead class="bg-gray-100 text-xs text-gray-800 uppercase tracking-wider">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 w-1/3">Masa</th>
+                                <th scope="col" class="px-6 py-3 w-2/3">Subjek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            daySchedule.forEach(slot => {
+                const rowClass = subjectColors[slot.subject] || defaultColor;
+                tableHTML += `
+                    <tr class="border-b ${rowClass}">
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">${slot.time}</td>
+                        <td class="px-6 py-4 font-bold">${slot.subject}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            content.innerHTML = tableHTML;
+        }
+        
+        function renderWeekly() {
+            const content = document.getElementById('page-weekly');
+            content.innerHTML = '';
+
+            const timeToMinutes = (timeStr) => {
+                const [time, modifier] = timeStr.split(' ');
+                let [hours, minutes] = time.split(':').map(Number);
+                if (modifier === 'PM' && hours < 12) hours += 12;
+                if (modifier === 'AM' && hours === 12) hours = 0;
+                return hours * 60 + minutes;
+            };
+            
+            const allTimeStrings = new Set();
+            Object.values(timetableData).flat().forEach(slot => allTimeStrings.add(slot.time));
+            const sortedTimeStrings = Array.from(allTimeStrings).sort((a, b) => timeToMinutes(a.split(' - ')[0]) - timeToMinutes(b.split(' - ')[0]));
+
+            const timeIntervals = sortedTimeStrings.map(ts => {
+                const [start, end] = ts.split(' - ');
+                return { start, end, full: ts };
+            });
+
+            const days = ["Isnin", "Selasa", "Rabu", "Khamis", "Jumaat"];
+            const jawiDays = {
+                "Isnin": "إِثْنَيْن",
+                "Selasa": "ثُلَاثَاء",
+                "Rabu": "أَرْبِعَاء",
+                "Khamis": "خَمِيس",
+                "Jumaat": "جُمُعَة"
+            };
+            
+            let headerHTML = `<th class="p-2 border bg-gray-100 w-40">MASA / HARI</th>`;
+            days.forEach(day => headerHTML += `<th class="p-2 border bg-gray-100 w-32">${jawiDays[day]}</th>`);
+
+            let bodyHTML = '';
+            timeIntervals.forEach(interval => {
+                bodyHTML += `<tr>`;
+                
+                bodyHTML += `<td class="px-2 py-1 border text-center font-semibold text-gray-700 bg-gray-50 align-middle h-14">
+                                <div>${interval.start}</div>
+                                <div>${interval.end}</div>
+                             </td>`;
+
+                days.forEach(day => {
+                    const scheduleForDay = timetableData[day] || [];
+                    const slot = scheduleForDay.find(s => s.time === interval.full);
+                    
+                    if (slot) {
+                        const colorClass = (subjectColors[slot.subject] || defaultColor).split(' ')[0];
+                        let content = `<div class="font-bold">${slot.subject}</div>`;
+                        bodyHTML += `<td class="p-1 border text-center align-middle ${colorClass} h-14">${content}</td>`;
+                    } else {
+                        bodyHTML += `<td class="p-1 border bg-gray-50 h-14"></td>`;
+                    }
+                });
+                bodyHTML += `</tr>`;
+            });
+
+            const buttonHTML = `
+                <div class="flex justify-end mb-4">
+                    <button onclick="saveWeeklyAsPDF()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Simpan sebagai PDF
+                    </button>
+                </div>
+            `;
+            
+            const tableContainerHTML = `
+                <div class="overflow-x-auto bg-white rounded-lg shadow-md" id="weekly-table-container">
+                    <table class="min-w-full text-xs border-collapse">
+                        <thead class="bg-gray-50">
+                            <tr>${headerHTML}</tr>
+                        </thead>
+                        <tbody>${bodyHTML}</tbody>
+                    </table>
+                </div>
+            `;
+            
+            content.innerHTML = buttonHTML + tableContainerHTML;
+        }
+
+        function saveWeeklyAsPDF() {
+            const headerInfo = document.querySelector('header').cloneNode(true);
+            const tableContainer = document.getElementById('weekly-table-container').cloneNode(true);
+
+            const printableElement = document.createElement('div');
+            printableElement.style.padding = '20px';
+            printableElement.appendChild(headerInfo);
+            printableElement.appendChild(tableContainer);
+
+            const opt = {
+              margin:       [0.5, 0.5, 0.5, 0.5],
+              filename:     'Jadual_Mingguan_2_Jibrail.pdf',
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2, logging: false, useCORS: true },
+              jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().from(printableElement).set(opt).save();
+        }
+
+        function renderAcademic() {
+            const content = document.getElementById('academic-content');
+            content.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-center text-green-800 mb-4 border-b-2 pb-2">KALENDAR AKADEMIK SESI 2025/2026 (KUMPULAN B)</h2>
+                    <p class="text-sm text-center text-gray-600 mb-6">Sekolah-sekolah di negeri: Melaka, Johor, Negeri Sembilan, Pahang, Perak, Perlis, Pulau Pinang, Sabah, Sarawak, Selangor, WP Kuala Lumpur, WP Labuan & WP Putrajaya</p>
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-green-700">PENGGAL 1</h3>
+                            <p><strong class="w-40 inline-block">MULA PERSEKOLAHAN:</strong> 17.02.2025</p>
+                            <p><strong class="w-40 inline-block">AKHIR PERSEKOLAHAN:</strong> 28.05.2025</p>
+                        </div>
+                        <div class="text-center bg-yellow-100 p-2 rounded-lg">
+                            <p class="font-bold text-yellow-800">CUTI PENGGAL 1</p>
+                            <p class="text-yellow-700">29.05.2025 - 09.06.2025 (12 hari)</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-green-700">PENGGAL 2</h3>
+                            <p><strong class="w-40 inline-block">MULA PERSEKOLAHAN:</strong> 10.06.2025</p>
+                            <p><strong class="w-40 inline-block">AKHIR PERSEKOLAHAN:</strong> 12.09.2025</p>
+                        </div>
+                        <div class="text-center bg-yellow-100 p-2 rounded-lg">
+                            <p class="font-bold text-yellow-800">CUTI PENGGAL 2</p>
+                            <p class="text-yellow-700">13.09.2025 - 21.09.2025 (9 hari)</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-green-700">PENGGAL 3</h3>
+                            <p><strong class="w-40 inline-block">MULA PERSEKOLAHAN:</strong> 22.09.2025</p>
+                            <p><strong class="w-40 inline-block">AKHIR PERSEKOLAHAN:</strong> 19.12.2025</p>
+                        </div>
+                        <div class="text-center bg-green-100 p-3 rounded-lg">
+                            <p class="font-bold text-green-800">CUTI AKHIR PERSEKOLAHAN</p>
+                            <p class="text-green-700">20.12.2025 - 11.01.2026 (23 hari)</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Paparan awal semasa muat halaman
+        window.onload = () => {
+            renderDaily('Isnin');
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
