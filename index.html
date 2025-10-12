@@ -48,9 +48,11 @@
         
         <!-- Pengepala -->
         <header class="text-center mb-8">
+            <div class="flex justify-center mb-4">
+                 <img src="https://scontent.fkul6-2.fna.fbcdn.net/v/t39.30808-6/410467249_811915354073903_6576853622577004600_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeF-TfswvpYnCRN_O6CKgP_A4a0Q5aVGvrXhrRDlpUa-tR3KPK3Kqq5LSY3F5-PY6s4_v4-wzGRddzVTM8DSPJ7n&_nc_ohc=x3srIsi3s7sQ7kNvwFr9bss&_nc_oc=Admucx0GvZ1VoUrFjHO-VKD5q4T7mFmspZX4yLvdK84GJiGkE6jP036aSte1YBp3txw&_nc_zt=23&_nc_ht=scontent.fkul6-2.fna&_nc_gid=dxwUGH7A9qzTrTURuExNfw&oh=00_AfcvKxX1aZZh_hBwqPEoDGsKL6qYKJEq0B67RVgJQ0gpFA&oe=68F130FA" alt="Logo Sekolah" class="h-16 sm:h-20 rounded-full">
+            </div>
             <div class="flex justify-center items-center gap-4">
-                <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Jadual Waktu Sekolah</h1>
-                <img src="https://scontent.fkul6-2.fna.fbcdn.net/v/t39.30808-6/410467249_811915354073903_6576853622577004600_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFD0_LPyfFkuytAOASHZuS_4a0Q5aVGvrXhrRDlpUa-tUULTeK46Retv756yYGChSX16jvD2ZhAu9WOO8L355KX&_nc_ohc=kUi44dHys6sQ7kNvwFw8KDe&_nc_oc=AdkQQWjqdTQQpRdNTM_xtKxq0NDejrE5yTk8Kdm0IBz3lgbZulWEH-wFu-4Doo9y-fw&_nc_zt=23&_nc_ht=scontent.fkul6-2.fna&_nc_gid=0gzyCkI6_Fz8YolI0Nfw0Q&oh=00_AfedZyhYsTQ8roHnTeyVHriG00no5xkHENgi5bfR0zcxgw&oe=68E74DBA" alt="Logo Sekolah Kanan" class="h-12 sm:h-16 rounded-full">
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Jadual Waktu Kelas</h1>
             </div>
             <div class="mt-4 text-gray-600 inline-block text-left bg-white p-4 rounded-lg shadow-sm">
                 <p><span class="font-semibold">Sekolah:</span> س.ا.ر كافا (ا) ڤونچق عالم ٢</p>
@@ -358,37 +360,50 @@
         }
 
         function saveWeeklyAsPDF() {
-            // 1. Dapatkan elemen pengepala dan jadual untuk PDF
-            const headerInfo = document.querySelector('header').cloneNode(true);
+            // 1. Dapatkan elemen jadual
             const tableContainer = document.getElementById('weekly-table-container').cloneNode(true);
+            
+            // Ubah suai gaya jadual untuk PDF - kecilkan fon dan padding
+            const pdfTable = tableContainer.querySelector('table');
+            if (pdfTable) {
+                pdfTable.style.fontSize = '9px'; // Kecilkan saiz fon
+                const cells = pdfTable.querySelectorAll('th, td');
+                cells.forEach(cell => {
+                    cell.style.padding = '2px'; // Kurangkan padding
+                });
+            }
 
-            // 2. Cipta elemen sementara untuk menjana PDF
+            // 2. Cipta elemen pengepala khas untuk PDF
+            const pdfHeaderHTML = `
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <img src="https://scontent.fkul6-2.fna.fbcdn.net/v/t39.30808-6/410467249_811915354073903_6576853622577004600_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeF-TfswvpYnCRN_O6CKgP_A4a0Q5aVGvrXhrRDlpUa-tR3KPK3Kqq5LSY3F5-PY6s4_v4-wzGRddzVTM8DSPJ7n&_nc_ohc=x3srIsi3s7sQ7kNvwFr9bss&_nc_oc=Admucx0GvZ1VoUrFjHO-VKD5q4T7mFmspZX4yLvdK84GJiGkE6jP036aSte1YBp3txw&_nc_zt=23&_nc_ht=scontent.fkul6-2.fna&_nc_gid=dxwUGH7A9qzTrTURuExNfw&oh=00_AfcvKxX1aZZh_hBwqPEoDGsKL6qYKJEq0B67RVgJQ0gpFA&oe=68F130FA" alt="Logo Sekolah" style="height: 50px; border-radius: 50%; margin: 0 auto;">
+                    <h1 style="font-size: 20px; font-weight: bold; margin-top: 8px; margin-bottom: 8px;">Jadual Waktu Kelas</h1>
+                    <div style="font-size: 12px; line-height: 1.4;">
+                        <p style="margin: 2px 0;"><strong>Sekolah:</strong> س.ا.ر كافا (ا) ڤونچق عالم ٢</p>
+                        <p style="margin: 2px 0;"><strong>Kelas:</strong> ٢ جبريل</p>
+                        <p style="margin: 2px 0;"><strong>Sesi:</strong> ڤاڬي</p>
+                        <p style="margin: 2px 0;"><strong>Nama Murid:</strong> ڤوتري نور عايشه</p>
+                    </div>
+                </div>
+            `;
+
+            // 3. Cipta elemen sementara untuk menjana PDF
             const printableElement = document.createElement('div');
-            printableElement.style.padding = '15px'; 
-            printableElement.style.width = '210mm'; 
-            printableElement.style.boxSizing = 'border-box';
-
-            // Ubah suai gaya pengepala untuk paparan PDF
-            const headerTitle = headerInfo.querySelector('h1');
-            if (headerTitle) headerTitle.style.fontSize = '22px';
-            const headerDetails = headerInfo.querySelector('.mt-4');
-             if (headerDetails) headerDetails.style.padding = '10px';
-            const headerLogos = headerInfo.querySelectorAll('img');
-            headerLogos.forEach(logo => logo.style.height = '45px');
-
-            printableElement.appendChild(headerInfo);
+            
+            // Masukkan pengepala dan jadual
+            printableElement.innerHTML = pdfHeaderHTML;
             printableElement.appendChild(tableContainer);
 
-            // 3. Konfigurasi untuk html2pdf
+            // 4. Konfigurasi untuk html2pdf
             const opt = {
-              margin:       [10, 5, 10, 5],
+              margin:       5, // Margin dalam mm
               filename:     'Jadual_Mingguan_2_Jibrail.pdf',
-              image:        { type: 'jpeg', quality: 0.98 },
-              html2canvas:  { scale: 2, useCORS: true },
+              image:        { type: 'jpeg', quality: 1.0 },
+              html2canvas:  { scale: 3, useCORS: true, dpi: 300, letterRendering: true },
               jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
-            // 4. Jana dan simpan PDF
+            // 5. Jana dan simpan PDF
             html2pdf().from(printableElement).set(opt).save();
         }
 
@@ -397,7 +412,7 @@
             content.innerHTML = `
                 <div class="bg-white rounded-xl shadow-lg p-6">
                     <h2 class="text-2xl font-bold text-center text-green-800 mb-4 border-b-2 pb-2">KALENDAR AKADEMIK SESI 2025/2026 (KUMPULAN B)</h2>
-                    <p class="text-sm text-center text-gray-600 mb-6">Sekolah-sekolah di negeri: Melaka, Johor, Negeri Sembilan, Pahang, Perak, Perlis, Pulau Pinang, Sabah, Sarawak, Selangor, WP Kuala Lumpur, WP Labuan & WP Putrajaya</p>
+                    <p class="text-sm text-center text-gray-600 mb-6">Sekolah-kolah di negeri: Melaka, Johor, Negeri Sembilan, Pahang, Perak, Perlis, Pulau Pinang, Sabah, Sarawak, Selangor, WP Kuala Lumpur, WP Labuan & WP Putrajaya</p>
                     <div class="space-y-4">
                         <div>
                             <h3 class="text-lg font-semibold text-green-700">PENGGAL 1</h3>
@@ -440,15 +455,4 @@
     </script>
 </body>
 </html>
-
-
-
-       
-
-
-
-
-
-
-
 
